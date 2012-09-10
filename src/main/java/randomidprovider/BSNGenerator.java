@@ -18,18 +18,20 @@ public class BSNGenerator {
 
     public String getBsn() {
         StringBuffer sb = new StringBuffer();
+        int sum = 0;
         for (int i = 0; i < 8; i++) {
-            sb.append(random.nextInt(10));
-        }
-        for (int i = 0; i < 10; i++) {
-            sb.append(i);
-            if (isElfProof(sb.toString())) {
-                return sb.toString();
-            }
-            sb.deleteCharAt(sb.length() - 1);
+            int nextInt = random.nextInt(10);
+            sb.append(nextInt);
+            sum += (9 - i) * nextInt;
         }
 
-        throw new RuntimeException("WTF?");
+        int remainder = sum % 11;
+        if (remainder == 1) {
+            return getBsn();
+        }
+
+        sb.append((11 - remainder) % 11);
+        return sb.toString();
     }
 
     public boolean isElfProof(String bsn) {
@@ -38,6 +40,20 @@ public class BSNGenerator {
         int sum = 0;
 
         for (int i = 0; i < cleanBsn.length(); i++) {
+            char c = cleanBsn.charAt(i);
+
+            sum += (cleanBsn.length() - i) * Character.digit(c, 10);
+        }
+
+
+        return sum % 11 == 0 && sum > 0;
+    }
+
+    public boolean isBsnNumber(String bsn) {
+        String cleanBsn = clearNonDigits(bsn);
+        int sum = 0;
+
+        for (int i = 0; i < cleanBsn.length() - 1; i++) {
             char c = cleanBsn.charAt(i);
 
             sum += (cleanBsn.length() - i) * Character.digit(c, 10);

@@ -1,8 +1,11 @@
 package randomidprovider;
 
+import org.springframework.stereotype.Component;
+
 /**
  *
  */
+@Component
 public class PersonGeneratorImpl implements PersonGenerator {
 
 
