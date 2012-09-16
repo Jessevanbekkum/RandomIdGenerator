@@ -30,11 +30,11 @@ public class RandomParameterReader {
     }
 
 
-    RandomParameterReader(final File file, final long seed) throws IOException {
-        if (seed == 0) {
-            random = new Random();
+    public RandomParameterReader(final File file, final Random random) throws IOException {
+        if (random == null) {
+            this.random = new Random();
         } else {
-            random = new Random(seed);
+            this.random = random;
         }
 
         BufferedReader inputStream = new BufferedReader(new FileReader(file));
@@ -46,16 +46,15 @@ public class RandomParameterReader {
                 name = new Name(fields[0], 1);
             } else {
                 name = new Name(fields[0], Double.valueOf(fields[1]));
-                names.add(name);
             }
-
-            normalize();
+            names.add(name);
         }
+        normalize();
+    }
 
-
-        RandomParameterReader(File file)throws IOException {
-            this(file, 0);
-        }
+    public RandomParameterReader(File file) throws IOException {
+        this(file, null);
+    }
 
 
     private void normalize() {
@@ -75,9 +74,9 @@ public class RandomParameterReader {
         int i = 0;
         for (Name name : names) {
             if (r < name.cumulative) {
-                continue;
+                return name.name;
             }
-            return name.name;
+
         }
         throw new RuntimeException("WTF?");
     }

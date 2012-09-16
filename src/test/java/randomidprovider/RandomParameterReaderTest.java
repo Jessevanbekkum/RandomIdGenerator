@@ -6,7 +6,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Random;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 /**
@@ -22,7 +25,11 @@ public class RandomParameterReaderTest {
         f.deleteOnExit();
         try {
             BufferedWriter bos = new BufferedWriter(new FileWriter(f));
-            bos.write("Jan\nPiet\nKlaas");
+            for (int i = 0;i<100;i++) {
+                bos.write("Naam" + i);
+                bos.newLine();
+            }
+          bos.flush();
             bos.close();
         }  catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -35,10 +42,12 @@ public class RandomParameterReaderTest {
     public void GenerateNames() {
         try {
             File f = generatePlainFile();
-            RandomParameterReader rpr = new RandomParameterReader(f, 0);
-            System.out.println(rpr.getOne());
-            System.out.println(rpr.getOne());
-            rpr.getOne();
+            RandomParameterReader rpr = new RandomParameterReader(f, new Random(0));
+            for (int i =0;i<19;i++) {
+               rpr.getOne();
+            }
+
+            assertThat(rpr.getOne(), is("Naam77"));
         } catch (IOException e) {
             fail();
         }
