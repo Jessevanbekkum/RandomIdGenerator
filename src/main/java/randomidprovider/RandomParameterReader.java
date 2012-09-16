@@ -30,7 +30,7 @@ public class RandomParameterReader {
     }
 
 
-    RandomParameterReader(File file, long seed) throws IOException {
+    RandomParameterReader(final File file, final long seed) throws IOException {
         if (seed == 0) {
             random = new Random();
         } else {
@@ -41,18 +41,23 @@ public class RandomParameterReader {
         String line;
         while ((line = inputStream.readLine()) != null) {
             String[] fields = line.split(";");
+            Name name;
+            if (fields.length == 1) {
+                name = new Name(fields[0], 1);
+            } else {
+                name = new Name(fields[0], Double.valueOf(fields[1]));
+                names.add(name);
+            }
 
-            Name name = new Name(fields[0], Double.valueOf(fields[1]));
-            names.add(name);
+            normalize();
         }
 
-        normalize();
-    }
+
+        RandomParameterReader(File file)throws IOException {
+            this(file, 0);
+        }
 
 
-    RandomParameterReader(File file) throws IOException {
-        this(file, 0);
-    }
     private void normalize() {
         double factor = 1 / lastCumulative();
         for (Name name : names) {
@@ -72,7 +77,7 @@ public class RandomParameterReader {
             if (r < name.cumulative) {
                 continue;
             }
-            return  name.name;
+            return name.name;
         }
         throw new RuntimeException("WTF?");
     }
