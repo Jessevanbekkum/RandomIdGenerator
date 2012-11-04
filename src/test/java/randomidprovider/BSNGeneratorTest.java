@@ -1,15 +1,10 @@
 package randomidprovider;
 
-import org.junit.Test;
-
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-
 /**
  *
  */
 public class BSNGeneratorTest {
-    @Test
+   /* @Test
     public void testGetBsn() throws Exception {
         BSNGenerator bsnGenerator = new BSNGenerator(0);
 
@@ -37,4 +32,6 @@ public class BSNGeneratorTest {
         BSNGenerator bsnGenerator = new BSNGenerator();
         assertThat(bsnGenerator.isElfProof("73.62.60.221"), is(false));
     }
+
+    */
 }

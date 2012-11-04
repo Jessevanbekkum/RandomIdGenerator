@@ -9,6 +9,11 @@ import org.springframework.stereotype.Component;
 public class PersonGeneratorImpl implements PersonGenerator {
 
 
+    PersonGeneratorImpl(RandomParameterReader firstNameReader, RandomParameterReader lastNameReader) {
+
+    }
+
+
     @Override
     public Person getPerson() {
         Person person = new Person();

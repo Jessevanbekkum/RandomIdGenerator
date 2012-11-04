@@ -24,19 +24,15 @@ public class RandomParameterReader {
         private Name(String name, double prob) {
             this.name = name;
             this.prob = prob;
+            sum += prob;
             this.cumulative = sum;
-            sum = cumulative + prob;
+
         }
     }
 
 
-    RandomParameterReader(final File file, final long seed) throws IOException {
-        if (seed == 0) {
-            random = new Random();
-        } else {
-            random = new Random(seed);
-        }
-
+    RandomParameterReader(final File file, final Random random) throws IOException {
+        this.random = random;
         BufferedReader inputStream = new BufferedReader(new FileReader(file));
         String line;
         while ((line = inputStream.readLine()) != null) {
@@ -44,22 +40,24 @@ public class RandomParameterReader {
             Name name;
             if (fields.length == 1) {
                 name = new Name(fields[0], 1);
+
             } else {
                 name = new Name(fields[0], Double.valueOf(fields[1]));
-                names.add(name);
             }
+            names.add(name);
 
-            normalize();
+
         }
+        normalize();
+    }
 
-
-        RandomParameterReader(File file)throws IOException {
-            this(file, 0);
-        }
+    RandomParameterReader(File file) throws IOException {
+        this(file, new Random());
+    }
 
 
     private void normalize() {
-        double factor = 1 / lastCumulative();
+        double factor = 1 / sum;
         for (Name name : names) {
             name.cumulative *= factor;
         }
@@ -74,7 +72,7 @@ public class RandomParameterReader {
 
         int i = 0;
         for (Name name : names) {
-            if (r < name.cumulative) {
+            if (r > name.cumulative) {
                 continue;
             }
             return name.name;
