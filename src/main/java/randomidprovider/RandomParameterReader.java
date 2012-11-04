@@ -31,8 +31,18 @@ public class RandomParameterReader {
     }
 
 
+<<<<<<< HEAD
     RandomParameterReader(final File file, final Random random) throws IOException {
         this.random = random;
+=======
+    public RandomParameterReader(final File file, final Random random) throws IOException {
+        if (random == null) {
+            this.random = new Random();
+        } else {
+            this.random = random;
+        }
+
+>>>>>>> c507a8010582a4fa503d396e4ee2d6d54b704ae2
         BufferedReader inputStream = new BufferedReader(new FileReader(file));
         String line;
         while ((line = inputStream.readLine()) != null) {
@@ -45,6 +55,7 @@ public class RandomParameterReader {
                 name = new Name(fields[0], Double.valueOf(fields[1]));
             }
             names.add(name);
+<<<<<<< HEAD
 
 
         }
@@ -53,6 +64,14 @@ public class RandomParameterReader {
 
     RandomParameterReader(File file) throws IOException {
         this(file, new Random());
+=======
+        }
+        normalize();
+    }
+
+    public RandomParameterReader(File file) throws IOException {
+        this(file, null);
+>>>>>>> c507a8010582a4fa503d396e4ee2d6d54b704ae2
     }
 
 
@@ -72,10 +91,15 @@ public class RandomParameterReader {
 
         int i = 0;
         for (Name name : names) {
+<<<<<<< HEAD
             if (r > name.cumulative) {
                 continue;
+=======
+            if (r < name.cumulative) {
+                return name.name;
+>>>>>>> c507a8010582a4fa503d396e4ee2d6d54b704ae2
             }
-            return name.name;
+
         }
         throw new RuntimeException("WTF?");
     }
